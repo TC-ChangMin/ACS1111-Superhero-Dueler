@@ -1,10 +1,11 @@
 import random
 
 class Hero:
-    def __init__(self, name, starting_health=100):
-        self.name = name
-        self.starting_health = starting_health
-        self.current_health = starting_health
+    def __init__(self, name: str, starting_health: int =100):
+       if not isinstance(name, str):
+           raise ValueError("name must be a string")
+       if not isinstance(starting_health, int):
+           raise ValueError("health must be an integer")
 
     def fight(self, opponent):
       winner = random.choice([self, opponent])
