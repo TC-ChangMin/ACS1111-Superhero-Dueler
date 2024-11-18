@@ -1,18 +1,51 @@
 import random
 
+from ability import Ability
+from armor import Armor
+
 class Hero:
     def __init__(self, name: str, starting_health: int =100):
-       if not isinstance(name, str):
-           raise ValueError("name must be a string")
-       if not isinstance(starting_health, int):
-           raise ValueError("health must be an integer")
+        self.name = name
+        self.starting_health = starting_health
+        self.current_health = starting_health
 
-    def fight(self, opponent):
+        self.armors: list = list()
+        self.abilities: list = list()
+
+    def add_ability(self, ability):
+        self.abilities.append(ability)
+
+    def attack(self):
+        total_damage = 0
+        for ability in self.abilities:
+            total_damage += ability.attack()
+        return total_damage
+    
+    def add_armor(self, armor):
+        self.armors.append(armor)
+
+    def defend(self):
+        total_blocked = 0
+        for blocked_damage in self.armors:
+            total_blocked += blocked_damage.block()
+        return total_blocked
+    
+    def take_damage(self, damage):
+        damage_taken = damage - self.defend() 
+        self.current_health -= damage_taken
+        return self.current_health
+
+    """def fight(self, opponent):
       winner = random.choice([self, opponent])
       return f"{winner.name} wins!"
+    """
 
 if __name__ == "__main__":
-   hero1 = Hero("Wonder Woman")
-   hero2 = Hero("Dumbledore")
+    # If you run this file from the terminal
+    # this block of code is executed.
 
-   print(hero1.fight(hero2))
+    hero = Hero("Grace Hopper", 200)
+    shield = Armor("Shield", 50)
+    hero.add_armor(shield)
+    hero.take_damage(50)
+    print(f"After taking damage: {hero.name} has {hero.current_health} health")
