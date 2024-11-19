@@ -10,8 +10,26 @@ class Hero:
         self.starting_health = starting_health
         self.current_health = starting_health
 
+        self.kills: int = 0
+        self.deaths: int = 0
         self.armors: list = list()
         self.abilities: list = list()
+
+    def add_kill(self):
+        self.kills += 1
+
+    def add_death(self):
+        self.deaths += 1
+
+    def is_alive(self):
+        """
+        return True or False depending on whether the hero is alive or not
+        """
+        if self.current_health <= 0:
+            print(f"{self.name} has fainted!")
+            return False
+        else:
+            return True
 
     def add_ability(self, ability):
         self.abilities.append(ability)
@@ -39,15 +57,43 @@ class Hero:
         self.current_health -= damage_taken
         return self.current_health
 
-    """def fight(self, opponent):
-      winner = random.choice([self, opponent])
-      return f"{winner.name} wins!"
-    """
+    def fight(self, opponent):
+        """
+        current hero will take turns fighting the oppenent hero passed in
+        """
+        while self.is_alive() == True and opponent.is_alive() == True:
+            self.take_damage(opponent.attack())
+            opponent.take_damage(self.attack())
+            print(f"{self.name} has {self.current_health} hp and {opponent.name} has {opponent.current_health} hp")
+
+        if opponent.is_alive() == False:
+            self.add_kill()
+            opponent.add_death()
+            print(f"{self.name} won!")
+
+        if self.is_alive() == False:
+            opponent.add_kill()
+            self.add_death()
+            print(f"{opponent.name} won!")
+    
 
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
-    hero = Hero("Wonder Woman")
-    weapon = Weapon("Lasso of Truth", 90)
-    hero.add_weapon(weapon)
-    print(hero.attack())
+    hero1 = Hero("wonder woman")
+    hero2 = Hero("dumbledore")
+    ability1 = Ability("super speed", 300)
+    ability2 = Ability("super eyes", 130)
+    ability3 = Ability("wizard wand", 80)
+    ability4 = Ability("wizard beard", 20)
+    hero1.add_ability(ability1)
+    hero1.add_ability(ability2)
+    hero2.add_ability(ability3)
+    hero2.add_ability(ability4)
+    hero1.fight(hero2)
+
+    print(f"Hero1 deaths: {hero1.deaths}")
+    print(f"Hero1 kills: {hero1.kills}")
+    print("="*60)
+    print(f"Hero2 deaths: {hero2.deaths}")
+    print(f"Hero2 kills: {hero2.kills}")
