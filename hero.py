@@ -2,6 +2,7 @@ import random
 
 from ability import Ability
 from armor import Armor
+from weapon import Weapon
 
 class Hero:
     def __init__(self, name: str, starting_health: int =100):
@@ -20,6 +21,9 @@ class Hero:
         for ability in self.abilities:
             total_damage += ability.attack()
         return total_damage
+    
+    def add_weapon(self, weapon):
+        self.abilities.append(weapon)
     
     def add_armor(self, armor):
         self.armors.append(armor)
@@ -42,10 +46,8 @@ class Hero:
 
 if __name__ == "__main__":
     # If you run this file from the terminal
-    # this block of code is executed.
-
-    hero = Hero("Grace Hopper", 200)
-    shield = Armor("Shield", 50)
-    hero.add_armor(shield)
-    hero.take_damage(50)
-    print(f"After taking damage: {hero.name} has {hero.current_health} health")
+    # this block is executed.
+    hero = Hero("Wonder Woman")
+    weapon = Weapon("Lasso of Truth", 90)
+    hero.add_weapon(weapon)
+    print(hero.attack())
